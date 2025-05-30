@@ -1,4 +1,10 @@
-import { Controller } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 
-@Controller('app')
-export class AppController {}
+@Controller()
+export class AppController {
+  @Post('import')
+  @HttpCode(HttpStatus.ACCEPTED)
+  postHello() {
+    return { id: 'foo' };
+  }
+}

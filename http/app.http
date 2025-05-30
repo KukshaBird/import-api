@@ -1,0 +1,7 @@
+### Start import
+POST localhost:3000/api/v1/import
+
+
+### GET products
+GET localhost:3000/api/v1/products
+Content-Type: application/json
