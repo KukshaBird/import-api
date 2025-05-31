@@ -1,7 +1,8 @@
 export type Payload = object | string[] | string | number | number[] | [];
 
-interface ClientOptions {
+export interface ClientOptions {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+  params?: Record<string, string>;
   data?: Payload;
 }
 
@@ -23,7 +24,10 @@ export class Client {
     const body: string | undefined = options.data
       ? JSON.stringify(options.data)
       : undefined;
-    const response = await fetch(cleanUrl, {
+    const params = options.params
+      ? new URLSearchParams(options.params)
+      : undefined;
+    const response = await fetch(`${cleanUrl}${params ? `?${params}` : ''}`, {
       ...this._options,
       ...options,
       body: body,
