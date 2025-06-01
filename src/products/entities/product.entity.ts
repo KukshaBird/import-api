@@ -50,7 +50,7 @@ export class Product {
   @Column('simple-array')
   tags: string[];
 
-  @Column()
+  @Column({ nullable: true })
   brand: string;
 
   @Column()
