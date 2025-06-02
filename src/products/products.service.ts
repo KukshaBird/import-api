@@ -5,6 +5,10 @@ import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 
+interface DeletedProduct {
+  id: number;
+}
+
 @Injectable()
 export class ProductsService {
   constructor(
@@ -28,6 +32,23 @@ export class ProductsService {
   }
 
   findAll() {
+    // TODO: Implement indAll with pagination and search;
     return this.productRepository.find();
+  }
+
+  public async fondOne(id: number) {
+    return this.productRepository.findOne({ where: { id } });
+  }
+
+  public async deleteProductsNotInIdList(ids: number[]) {
+    const result = await this.productRepository
+      .createQueryBuilder()
+      .delete()
+      .from('products')
+      .where('id NOT IN (:...ids)', { ids })
+      .returning('id')
+      .execute();
+
+    return (result.raw as DeletedProduct[]).map((item) => item.id);
   }
 }
