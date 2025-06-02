@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Product } from '../products/entities/product.entity';
-import { ProductsModule } from '../products/products.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { DummyJsonClient } from './classes/DummyJsonClient';
-import { QueueModule } from '../queue/queue.module';
+import { Product } from './products/entities/product.entity';
+import { ProductsModule } from './products/products.module';
+import { QueueModule } from './queue/queue.module';
+import { ImportModule } from './import/import.module';
+import { Import } from './import/entities/import.entity';
 
 const { DATABASE_HOST, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } =
   process.env;
@@ -14,6 +13,7 @@ const { DATABASE_HOST, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } =
 @Module({
   imports: [
     ProductsModule,
+    ImportModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: DATABASE_HOST || 'postgres-dev',
@@ -22,11 +22,11 @@ const { DATABASE_HOST, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } =
       password: DATABASE_PASSWORD || '',
       port: 5432,
       synchronize: true, //TODO: remove in production;
-      entities: [Product],
+      entities: [Product, Import],
     }),
     QueueModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, DummyJsonClient],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
