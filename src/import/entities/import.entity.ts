@@ -22,8 +22,8 @@ export class Import {
   @Column('varchar', { length: 100 })
   resource: string;
 
-  @Column('simple-array', { default: [] })
-  products: Array<number>;
+  @Column('simple-array', { nullable: true })
+  products: number[];
 
   @CreateDateColumn()
   createdAt: Date;
