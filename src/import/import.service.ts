@@ -71,7 +71,7 @@ export class ImportService {
 
     const [items, total] = await this.productsService.findAndCount(
       pageOptionsDto,
-      { in: importEntry.products.map(String) },
+      { ids: importEntry.products },
     );
 
     return new PageResponseDto(

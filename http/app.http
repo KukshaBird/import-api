@@ -9,5 +9,5 @@ GET localhost:3000/api/v1/import/data/:uuid?skip=2&take=2
 
 
 ### GET products
-GET localhost:3000/api/v1/products
+GET localhost:3000/api/v1/products?skip=2&take=2&title=red
 Content-Type: application/json

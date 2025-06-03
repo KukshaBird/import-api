@@ -1,13 +1,19 @@
-import { In, Repository } from 'typeorm';
+import { FindOptionsWhere, In, ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { PageOptionsDto } from '../pagination/dtos/page-options.dto';
+import { PageResponseDto } from '../pagination/dtos/page-response.dto';
 
 interface DeletedProduct {
   id: number;
+}
+
+interface ProductListOptions {
+  ids?: number[];
+  title?: string;
 }
 
 @Injectable()
@@ -32,9 +38,18 @@ export class ProductsService {
     return this.productRepository.save(product);
   }
 
-  findAll() {
-    // TODO: Implement indAll with pagination and search;
-    return this.productRepository.find();
+  async findAll(
+    pageOptionsDto: PageOptionsDto,
+    options: ProductListOptions = {},
+  ) {
+    const [items, total] = await this.findAndCount(pageOptionsDto, options);
+
+    return new PageResponseDto(
+      items,
+      total,
+      pageOptionsDto.skip,
+      pageOptionsDto.take,
+    );
   }
 
   public async fondOne(id: number) {
@@ -55,12 +70,25 @@ export class ProductsService {
 
   public async findAndCount(
     pageOptionsDto: PageOptionsDto,
-    options: { in: string[] },
+    options: ProductListOptions,
   ) {
+    const { ids, title } = options;
+
+    const _options: FindOptionsWhere<Product> = {};
+
+    if (ids) {
+      _options.id = In(ids);
+    }
+
+    if (title) {
+      _options.title = ILike(`%${title.trim()}%`);
+    }
+
     return await this.productRepository.findAndCount({
-      where: { id: In(options.in) },
+      where: _options,
       skip: pageOptionsDto.skip,
       take: pageOptionsDto.take,
+      order: { id: 'ASC' },
     });
   }
 }
