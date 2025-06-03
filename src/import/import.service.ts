@@ -46,8 +46,6 @@ export class ImportService {
     }
 
     this.importRepository.merge(importInstance, updateImportDto);
-    console.log('DTO: ', updateImportDto);
-    console.log('IMPORT: ', importInstance);
     return await this.importRepository.save(importInstance);
   }
 }

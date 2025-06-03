@@ -49,7 +49,7 @@ export class ImportProcessor extends WorkerHost {
         await this.chunkToProcess(products, results);
       } else {
         // Perform a process per chunk;
-        await this.chunkToProcess(products, results);
+        await this.chunkToProcess(products, results); // process fetched chunk first;
         for (let i = chunkSize; i < total; i += chunkSize) {
           const chunk = await this.productsProvider.fetchProducts(chunkSize, i);
           await this.chunkToProcess(chunk.products, results);
