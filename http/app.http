@@ -1,5 +1,6 @@
 ### Start import
 POST localhost:3000/api/v1/import
+Content-Type: application/json
 
 ### GET Import status
 GET localhost:3000/api/v1/import/status/:uuid
@@ -10,4 +11,6 @@ GET localhost:3000/api/v1/import/data/:uuid?skip=2&take=2
 
 ### GET products
 GET localhost:3000/api/v1/products?skip=2&take=2&title=red
-Content-Type: application/json
+
+### Get details
+GET localhost:3000/api/v1/products/:id

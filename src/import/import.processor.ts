@@ -78,7 +78,7 @@ export class ImportProcessor extends WorkerHost {
     results: Results,
   ) {
     for (const product of products) {
-      const existingProduct = await this.productsService.fondOne(product.id);
+      const existingProduct = await this.productsService.findOne(product.id);
       if (existingProduct) {
         await this.productsService.update(product.id, product);
         results.updated.push(product.id);

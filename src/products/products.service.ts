@@ -52,8 +52,16 @@ export class ProductsService {
     );
   }
 
-  public async fondOne(id: number) {
+  public async findOne(id: number) {
     return this.productRepository.findOne({ where: { id } });
+  }
+
+  public async getById(id: number) {
+    const product = await this.productRepository.findOne({ where: { id } });
+    if (!product) {
+      throw new NotFoundException(`Product with id ${id} found`);
+    }
+    return product;
   }
 
   public async deleteProductsNotInIdList(ids: number[]) {
