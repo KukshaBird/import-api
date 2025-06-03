@@ -35,7 +35,6 @@ export class ImportController {
     @Param('id', ParseUUIDPipe) id: string,
     @Query() pageOptionsDto: PageOptionsDto,
   ) {
-    console.log(pageOptionsDto);
     return this.importService.getImportData(id, pageOptionsDto);
   }
 }
