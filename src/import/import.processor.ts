@@ -40,6 +40,10 @@ export class ImportProcessor extends WorkerHost {
   private async processChunks(job: Job<ProcessChunkJobData, void>) {
     const { chunkSize, importId, results } = job.data;
     try {
+      await this.importService.update(importId, {
+        status: ImportStatus.PROCESSING,
+      });
+
       const response = await this.productsProvider.fetchProducts(chunkSize);
 
       const { total, products } = response;
