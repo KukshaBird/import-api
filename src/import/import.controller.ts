@@ -1,4 +1,12 @@
-import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { ImportService } from './import.service';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { ImportDto } from './dtos/import.dto';
@@ -14,9 +22,10 @@ export class ImportController {
     return this.importService.startImport();
   }
 
+  @Serialize(ImportDto)
   @Get('/status/:id')
-  getStatus() {
-    // TODO: return job status and href to results data;
+  getStatus(@Param('id', ParseUUIDPipe) id: string) {
+    return this.importService.findOne(id);
   }
 
   @Get('data/:id')

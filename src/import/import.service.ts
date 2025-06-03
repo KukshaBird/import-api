@@ -50,4 +50,12 @@ export class ImportService {
     this.importRepository.merge(importInstance, updateImportDto);
     return await this.importRepository.save(importInstance);
   }
+
+  public async findOne(id: string) {
+    const importEntry = await this.importRepository.findOne({ where: { id } });
+    if (!importEntry) {
+      throw new NotFoundException(`Import with id ${id} found`);
+    }
+    return importEntry;
+  }
 }

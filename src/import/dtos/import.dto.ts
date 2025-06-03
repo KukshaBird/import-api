@@ -1,5 +1,5 @@
 import { IsArray, IsEnum, IsOptional } from 'class-validator';
-import { Expose, Exclude } from 'class-transformer';
+import { Expose, Exclude, Type } from 'class-transformer';
 
 export enum ImportStatus {
   PENDING = 'pending',
@@ -21,6 +21,7 @@ export class ImportDto {
   resource: string;
 
   @Expose()
+  @Type(() => Number)
   @IsArray()
   @IsOptional()
   products?: number[] = [];
