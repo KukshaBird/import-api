@@ -30,6 +30,8 @@ export class ImportService {
       importId: importEntry.id,
       results: results,
     });
+
+    return importEntry;
   }
 
   private async createImport(resource: string) {
