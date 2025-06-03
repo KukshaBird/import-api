@@ -4,6 +4,9 @@ POST localhost:3000/api/v1/import
 ### GET Import status
 GET localhost:3000/api/v1/import/status/:uuid
 
+### GET Import status
+GET localhost:3000/api/v1/import/data/:uuid?skip=2&take=2
+
 
 ### GET products
 GET localhost:3000/api/v1/products

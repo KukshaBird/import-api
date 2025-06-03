@@ -1,9 +1,10 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
+import { PageOptionsDto } from '../pagination/dtos/page-options.dto';
 
 interface DeletedProduct {
   id: number;
@@ -50,5 +51,16 @@ export class ProductsService {
       .execute();
 
     return (result.raw as DeletedProduct[]).map((item) => item.id);
+  }
+
+  public async findAndCount(
+    pageOptionsDto: PageOptionsDto,
+    options: { in: string[] },
+  ) {
+    return await this.productRepository.findAndCount({
+      where: { id: In(options.in) },
+      skip: pageOptionsDto.skip,
+      take: pageOptionsDto.take,
+    });
   }
 }

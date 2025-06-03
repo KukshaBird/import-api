@@ -6,6 +6,9 @@ import { Queue } from 'bullmq';
 import { Import } from './entities/import.entity';
 import { UpdateImportDto } from './dtos/update-import.dto';
 import { Results } from './import.processor';
+import { PageOptionsDto } from '../pagination/dtos/page-options.dto';
+import { PageResponseDto } from '../pagination/dtos/page-response.dto';
+import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class ImportService {
@@ -13,6 +16,7 @@ export class ImportService {
     @InjectRepository(Import)
     private readonly importRepository: Repository<Import>,
     @InjectQueue('import-products') private importQueue: Queue,
+    private readonly productsService: ProductsService,
   ) {}
   public async startImport() {
     // Fetch external api by chunks to avoid memory issues;
@@ -57,5 +61,24 @@ export class ImportService {
       throw new NotFoundException(`Import with id ${id} found`);
     }
     return importEntry;
+  }
+
+  public async getImportData(id: string, pageOptionsDto: PageOptionsDto) {
+    const importEntry = await this.findOne(id);
+    if (!importEntry) {
+      throw new NotFoundException(`Import with id ${id} found`);
+    }
+
+    const [items, total] = await this.productsService.findAndCount(
+      pageOptionsDto,
+      { in: importEntry.products.map(String) },
+    );
+
+    return new PageResponseDto(
+      items,
+      total,
+      pageOptionsDto.skip,
+      pageOptionsDto.take,
+    );
   }
 }
